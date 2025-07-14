@@ -15,6 +15,7 @@ fullscreen = 1
 orientation = portrait
 
 android.minapi = 21
+android.api = 31
 android.target = 31
 android.build_tools_version = 33.0.2
 android.ndk = 23b
@@ -29,3 +30,4 @@ android.debug = 1
 [buildozer]
 log_level = 2
 warn_on_root = 1
+
