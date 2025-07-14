@@ -17,9 +17,6 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y git openjdk-11-jdk wget unzip
 
-    - name: Check git version
-      run: git --version
-
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
@@ -35,9 +32,6 @@ jobs:
         rm -rf ~/.buildozer
         rm -rf ./.buildozer
 
-    - name: Update git submodules (se houver)
-      run: git submodule update --init --recursive || echo "No submodules found"
-
     - name: Install Android SDK Command Line Tools
       run: |
         wget https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip -O cmdline-tools.zip
@@ -50,7 +44,7 @@ jobs:
     - name: Build APK
       env:
         ANDROID_HOME: ${{ env.HOME }}/android-sdk
-        PATH: ${{ env.HOME }}/android-sdk/cmdline-tools/latest/bin:${{ env.HOME }}/android-sdk/platform-tools:${{ env.PATH }}
+        PATH: ${{ env.HOME }}/android-sdk/cmdline-tools/latest/bin:${{ env.HOME }}/android-sdk/platform-tools:/usr/bin:${{ env.PATH }}
       run: buildozer android debug
 
     - name: Upload APK artifact
