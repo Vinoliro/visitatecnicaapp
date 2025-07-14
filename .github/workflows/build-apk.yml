@@ -1,5 +1,4 @@
 name: Build APK
-# Atualização para disparar workflow - teste
 
 on:
   push:
@@ -13,10 +12,13 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Install system dependencies
+    - name: Install system dependencies (including git)
       run: |
         sudo apt-get update
         sudo apt-get install -y git openjdk-11-jdk wget unzip
+
+    - name: Check git version
+      run: git --version
 
     - name: Set up Python
       uses: actions/setup-python@v5
@@ -41,8 +43,7 @@ jobs:
       env:
         ANDROID_HOME: ${{ env.HOME }}/android-sdk
         PATH: ${{ env.HOME }}/android-sdk/cmdline-tools/latest/bin:${{ env.HOME }}/android-sdk/platform-tools:${{ env.PATH }}
-      run: |
-        buildozer android debug
+      run: buildozer android debug
 
     - name: Upload APK artifact
       uses: actions/upload-artifact@v4
