@@ -21,9 +21,10 @@ android.build_tools_version = 33.0.2
 android.ndk = 23b
 android.archs = arm64-v8a, armeabi-v7a
 
-# Corrigindo bug do build-tools 36.0.0
+# Forçar versão estável do p4a antes do bug da build-tools 36
 p4a.source = https://github.com/kivy/python-for-android.git
 p4a.branch = develop
+p4a.commit = 78b4bfb20b35e3068b3e22e4a5d5bfc4dba5e194
 
 presplash.filename = %(source.dir)s/data/presplash.png
 icon.filename = %(source.dir)s/data/icon.png
