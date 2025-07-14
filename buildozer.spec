@@ -21,7 +21,9 @@ android.build_tools_version = 33.0.2
 android.ndk = 23b
 android.archs = arm64-v8a, armeabi-v7a
 
-# Usar branch develop do python-for-android, sem fixar commit específico
+# Forçar build-tools 33.0.2 para evitar erro com a 36
+android.environ = P4A_FORCE_BUILD_TOOLS_VERSION=33.0.2
+
 p4a.source = https://github.com/kivy/python-for-android.git
 p4a.branch = develop
 
