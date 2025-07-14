@@ -2,6 +2,7 @@
 # Nome exibido no dispositivo
 title = Visita Técnica
 version = 0.1
+
 # Nome interno do pacote
 package.name = VisitaTecnica
 
@@ -20,27 +21,28 @@ source.include_patterns = visita_tecnica_app/*.kv, visita_tecnica_app/**/*.db, v
 # Bibliotecas Python necessárias
 requirements = python3,kivy,sqlite3,Pillow,cython,pyjnius
 
-# Permissões Android (adicione mais se necessário)
+# Permissões Android
 android.permissions = WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE, CAMERA
 
-# Defina se o app é em tela cheia
+# Tela cheia e orientação
 fullscreen = 1
-
-# Força a orientação retrato
 orientation = portrait
 
 # Versões da API Android
 android.minapi = 21
 android.target = 31
 
-# Arquiteturas de CPU suportadas
+# ✅ Corrigir erro do GitHub Actions aceitando build tools compatíveis
+android.build_tools_version = 33.0.2
+
+# Arquiteturas suportadas
 android.archs = arm64-v8a, armeabi-v7a
 
-# Caminho dos ícones e splash (opcional, se existirem)
+# Splash e ícone (opcional)
 presplash.filename = %(source.dir)s/data/presplash.png
 icon.filename = %(source.dir)s/data/icon.png
 
-# Tipo de build (debug = testes; release = publicação final)
+# Tipo de build
 android.debug = 1
 
 # Logging
