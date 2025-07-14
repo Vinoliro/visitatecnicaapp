@@ -10,45 +10,47 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout repositório
+      uses: actions/checkout@v4
 
-    - name: Instala dependências do sistema
+    - name: Instalar dependências do sistema
       run: |
-        sudo apt update
-        sudo apt install -y git zip unzip openjdk-11-jdk wget
+        sudo apt-get update
+        sudo apt-get install -y git openjdk-11-jdk wget unzip zip build-essential
 
-    - name: Instala Python
+    - name: Configurar Python
       uses: actions/setup-python@v5
       with:
         python-version: '3.11'
 
-    - name: Instala dependências Python
+    - name: Instalar dependências Python
       run: |
         python -m pip install --upgrade pip
         pip install buildozer cython
 
-    - name: Instala Android SDK e aceita licenças
+    - name: Instalar Android SDK
       run: |
+        wget https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip -O cmdline-tools.zip
         mkdir -p $HOME/android-sdk/cmdline-tools
-        wget https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip -O sdk.zip
-        unzip sdk.zip -d $HOME/android-sdk/cmdline-tools
+        unzip -q cmdline-tools.zip -d $HOME/android-sdk/cmdline-tools
         mv $HOME/android-sdk/cmdline-tools/cmdline-tools $HOME/android-sdk/cmdline-tools/latest
 
-        export ANDROID_HOME=$HOME/android-sdk
-        export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH
+        echo "y" | $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/android-sdk --licenses
+        $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/android-sdk \
+          "platform-tools" \
+          "platforms;android-31" \
+          "build-tools;33.0.2"
 
-        yes | sdkmanager --licenses
-        sdkmanager "platform-tools" "platforms;android-31" "build-tools;33.0.2"
+    - name: Limpar buildozer antigo (se existir)
+      run: rm -rf .buildozer
 
-    - name: Gera APK com Buildozer
+    - name: Construir APK
       env:
         ANDROID_HOME: ${{ env.HOME }}/android-sdk
         PATH: ${{ env.HOME }}/android-sdk/cmdline-tools/latest/bin:${{ env.HOME }}/android-sdk/platform-tools:${{ env.PATH }}
-      run: |
-        rm -rf .buildozer  # garante ambiente limpo
-        buildozer android debug
+      run: buildozer android debug
 
-    - name: Faz upload do APK
+    - name: Publicar APK
       uses: actions/upload-artifact@v4
       with:
         name: VisitaTecnica-APK
