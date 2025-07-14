@@ -15,7 +15,8 @@ jobs:
       PATH: ${{ github.workspace }}/android-sdk/cmdline-tools/latest/bin:${{ github.workspace }}/android-sdk/build-tools/33.0.2:${{ github.workspace }}/android-sdk/platform-tools:/usr/local/bin:/usr/bin:/bin
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Install system dependencies
         run: |
@@ -41,16 +42,16 @@ jobs:
           yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_HOME --licenses
           yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_HOME "platform-tools" "platforms;android-31" "build-tools;33.0.2"
 
+      - name: Show buildozer.spec for debug
+        run: cat buildozer.spec
+
       - name: Clean previous builds
         run: |
           rm -rf .buildozer bin
 
-      - name: Show buildozer.spec
-        run: cat buildozer.spec
-
       - name: Build APK
         run: |
-          export PATH=$PATH:$ANDROID_HOME/build-tools/33.0.2
+          export PATH=$ANDROID_HOME/build-tools/33.0.2:$PATH
           buildozer android debug
 
       - name: Upload APK
